@@ -1,0 +1,34 @@
+Advertising data: 
+(1) sales ~ $1000s spent on three types of advertisement (tv, radio, newspaper)
+(2) sales ~ newspaper: beta of newspaper is significant
+	  sales ~ tv + radio + newspaper: beta of newspaper is not significant 
+    (this is likely because corr(radio, newspaper)=0.35, the effect of newspaper is soaked into radio)
+
+The standard error of an estimator reflects how the estimator varies under repeated samples.
+se(\hat{slope})^2 = \frac{\sigma^2}{\sum_{i=1}{n} (x_{i}-\bar{x})^2}: 
+(1) large \sigma^2 gives more variable estimate of slope.
+(2) observations x_{i} are less spread out, the estimate of slope is more variable.
+
+Some questions to ask in multiple regression:
+(1) Is at least one predictor useful ? F-statistics
+(2) Which subset of predictors are important ? forward selection; backward selection
+(3) How to deal with qualitative variables (categorical variables, "factors") with K levels ? create (K-1) dummy variables 
+and the level without dummy variable is called the baseline level. And the choice of the baseline level does not affect 
+the fit of the linear regression model.
+
+Interactions of predictors
+(1) \hat{sales} = \beta_{0} + \beta_{1}*TV + \beta_{2}*radio: the average effect on sales of an one-unit increase in TV is 
+always \beta_{1}, independent of the amount spent on radio.
+The synergy effect in marketing: spending money on radio advertisement will increase the effectiveness of TV advertisement.
+The interaction effect in statistics: the slope for TV should increase as radio increases.
+
+(2) Hierarchy principle: if we include an interaction in a model, we should also include the main effects, 
+even if the p-values of the main effects' coefficients are not significant.
+
+(3.1) quantitative vs quantitative
+\hat{sales} = \beta_{0} + \beta_{1}*TV + \beta_{2}*radio + \beta_{3}*TV*radio
+
+(3.2) quantitative vs qualitative
+\hat{balance} = \beta_{0} + \beta_{1}*income + \beta_{2}*isStudent + \beta_{3}*income*isStudent
+\hat{balance} = \beta_{0} + \beta_{1}*income for non-student
+\hat{balance} = (\beta_{0} + \beta_{2}) + (\beta_{1} + \beta_{3})*income for student

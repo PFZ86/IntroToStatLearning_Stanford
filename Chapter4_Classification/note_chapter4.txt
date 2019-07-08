@@ -1,0 +1,66 @@
+Classification: qualitative variables that take values in an _unordered_ set C (such as email \in {spam, ham})
+
+P(Cancer): prior probability
+P(truePos | Cancer) = P(truePos | truePos + falseNeg): sensitivity, recall
+P(trueNeg | not Cancer) = P(trueNeg | falsePos + trueNeg): specifity
+P(truePos | testPos) = P(truePos | truePos + falsePos): accuracy
+
+Logistic regression:
+(1) Problems of using linear regression in a classification problem:
+(1.1) Linear regression can produce probabilities that are < 0 or > 1.
+(1.2) The penalty (y_{i}-\hat{y}_{i})^2 is not appropriate when \hat{y}_{i} is very positive or very negative.
+(1.3) When there are multiple categories, arbitrary coding of the response variable can be dangerous 
+(e.g., coding of 1=stroke,2=drug overdose,3=seizure suggests an ordering of outcomes that may not exist at all; 
+and it even implies the difference between stroke vs drug overdose is equal to the difference between drug overdose vs seizure)
+
+(2) An example of confounding effects in multiple logistic regression:
+Pr(default) ~ balance: beta for balance is positive.
+Pr(default) ~ isStudent: beta for isStudent is positive (the true reason is that students tend to 
+have higher balance than non-students, so the marginal default rate of students is higher than that of non-students).
+Pr(default) ~ balance + isStudent: beta for balance is positive, beta for isStudent is negative. 
+(at a given balance level, students default less often than non-students).
+
+(3) Case-control sampling
+(3.1) Cases (such as disease, spam, default) are usually rare, so we use all the cases we can find and sample controls.
+(3.2) Under case-control sampling, the estimates for the slopes are accurate.
+      Under case-control sampling, the estimate for the intercept is incorrect but this incorrect intercept 
+      estimate can be corrected.
+(3.3) Sampling more controls than cases reduces the variance of parameter estimates; but such variance reduction 
+      usually flattens out after controls/cases exceeds 5.
+(3.4) When cases are rare, prediction accuracy is not a good metric to evaluate a classification algorithm;
+      use F1 score = accuracy*recall/(accuracy + recall) instead.
+
+(4) Problems of logistic regression:
+(4.1) When the classes are (nearly) perfectly separable, the parameter estimates from logistic regression are very unstable.
+For such scenarios, support vector machine or discriminant analysis should be used.
+
+Discriminant analysis: model the distribution of X in each class separately, and then use Bayes theorem to obtain Pr(Y|X).
+(1) Pr(Y=k|X=x) = \frac{\pi_{k}\f_{k}(x)}{\sum_{i=1}^{K}\pi_{i}\f_{i}(x)}
+\pi_{k} = Pr(Y=k) is the marginal or prior probability for class k;
+f_{k}(x) = Pr(X=x|Y=k) is the density for X in class k.
+
+(2) A new data point X=x is classified according to which k gives the largest discriminant score \pi_{k}\f_{k}(x).
+
+(3.a) If \sigma_{1},...,\sigma_{K} (p=1) or \Sigma_{1},...,\Sigma_{K} (p > 1) are assumed to be equal, 
+      then the discriminant score for class k is a linear function of x ==> linear discriminant analysis.
+(3.b) When there are K classes, linear discriminant analysis can always be visualized in a (K-1)-dimensional plot. 
+      Each dimension represents one discriminant variable, which is a special linear combination of the original p variables.
+### pairs(Species~Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, data=iris, col=iris$Species)
+
+(4.a) If \sigma_{1},...,\sigma_{K} (p=1) or \Sigma_{1},...,\Sigma_{K} (p > 1) are not assumed to be equal, 
+      then the discriminant score for class k is a quadratic function of x ==> quadratic discriminant analysis.
+
+Naive Bayes:
+(1) Assume features are independent in each class. For Gaussian densities, this means \Sigma_{k} is diagonal.
+f_{k}(x) = \prod_{i=1}^{p}f_{k,i}(x_{i}), k=1,...,K
+
+(2.a) This assumption is useful when the number of features p is large; avoid estimating the p-by-p covariance matrix.
+(2.b) This assumption is always wrong; it usually leads to biased estimates for class probabilities, 
+      but gives good classification results (since classification is determined by whether or not we can get the class 
+      with the highest probability correct, rather than get the class probability correct).
+
+The null rate in a classification problem: 
+Always keep in mind what is the null mis-classification rate. In the credit dataset, a 4-variable linear discriminant 
+analysis produces a 2.75% mis-classification rate, which seems pretty good at the first glance. 
+But if we simply always predict "No", the null mis-classification rate is 3.33%, which makes the 2.75% mis-classification rate
+no longer exciting.

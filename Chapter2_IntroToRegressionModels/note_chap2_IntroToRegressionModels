@@ -1,0 +1,20 @@
+model Income with demographic data: Seniority and Years of Education have a big impact on Income, but Martial Status typically does not.
+
+regression:
+an "ideal" value f(X) at X=x is E(Y|X=x). f(x) = E(Y|X=x) is called the regression function and is optimal in the sense that it minimizes the mean-squared error E(Y-g(X))^2|X=x over all functions g(X). 
+E(Y-g(X))^2|X=x = (f(x)-g(x))^2 + E(Y-E(Y|X=x))^2
+                  reducible       irreducible
+However, in most of cases we cannot compute E(Y|X=x) since typically we have few if any data points with X = x exactly. Nearest neighbor averaging \hat{f}(x) = Average(Y(s)|s \in neighbor(x)) is a good approximate to E(Y|X=x) for small-dimensional X (such as p <= 4 and large N); but this nearest neighbor averaging may not work for higher-dimensional X.
+
+curse of dimensionality (for nearest neighbor averaging): to maintain a reasonable fraction (such as 10%) of N data points y_{i} for nearest neighbor averaging (to bring down the variance), nearest neighbors tend to be far away in high dimensions and a 10% neighborhood for large p may not be local at all, which loses the spirit of estimating E(Y|X=x) by local averaging.
+
+classification:
+an "ideal" classifier C(x) at X=x is: let p_{k}(x) = Pr(Y=k|X=x),k=1,2,...,K (conditional class probabilities); then C(x) = argmax_{k}{p_{1}(x),...,p_{K}(x)} is the optimal Bayes classifer. But, similar to the regression problem, in most of cases we cannot compute the conditional probabilities Pr(Y=k|X=x) since typically we have few if any data points with X = x exactly. Nearest neighbor averaging \hat{p}_{k}(x) = Proportion(Y=k|X \in neighbor(x)) can be used to approximate p_{k}(x) = Pr(Y=k|X=x) for small-dimensional X but this nearest neighbor averaging does not work for higher-dimensional X due to the curse of dimensionality.
+
+K nearest-neighbor classifier:
+K = 1: ER_training = 0; piece-wise linear decision boundary
+K large: low-complexity, high bias, low variance
+K small: high-complexity, low bias, high variance
+
+support vector machines build structured models for the classifier C(x)
+logistic regression, generalized additive models build structured models for the conditional probabilities p_{k}(x)
